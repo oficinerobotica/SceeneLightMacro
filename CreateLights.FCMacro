@@ -36,30 +36,30 @@ LIGHT_INTENSITY = 0.5
 
 def create_directional_light(name, horizontal_rot, vertical_rot):
    """  Create a directional light and set its properties. """ 
-   light = directional_light.createDirectionalLight()
-   if light:
-        light.HorizontalRotation = horizontal_rot
-        light.VerticalRotation = vertical_rot
-        light.Intensity = LIGHT_INTENSITY
-        light.Color = LIGHT_COLOR
-        return light
+   lightDirectional = directional_light.createDirectionalLight()
+   if lightDirectional:
+        lightDirectional.HorizontalRotation = horizontal_rot
+        lightDirectional.VerticalRotation = vertical_rot
+        lightDirectional.Intensity = LIGHT_INTENSITY
+        lightDirectional.Color = LIGHT_COLOR
+        return lightDirectional
 
 def create_point_light(name):
      """Create a point light and set its properties."""
-     light = point_light.createPointLight()
-     if light:
-        light.Intensity = LIGHT_INTENSITY
-        light.Color = LIGHT_COLOR
-        return light  
+     lightPoint = point_light.createPointLight()
+     if lightPoint:
+        lightPoint.Intensity = LIGHT_INTENSITY
+        lightPoint.Color = LIGHT_COLOR
+        return lightPoint 
 
 
 def create_spot_light(name):
      """Create a spot light and set its properties."""
-     light = spot_light.createSpotLight()
-     if light:
-        light.Intensity = LIGHT_INTENSITY
-        light.Color = LIGHT_COLOR
-        return light  
+     lightSpot = spot_light.createSpotLight()
+     if lightSpot:
+        lightSpot.Intensity = LIGHT_INTENSITY
+        lightSpot.Color = LIGHT_COLOR
+        return lightSpot 
 
 
 
@@ -77,7 +77,8 @@ if Light3:
 
 Light4 = create_spot_light('SpotLight')
 if Light4:
-    lights_part.addObject(Light3) 
+    lights_part.addObject(Light4) 
+    
 
 # Recompute the document
 FC.ActiveDocument.recompute()
