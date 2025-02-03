@@ -8,7 +8,7 @@ macro_dir = os.path.dirname(__file__)
 sys.path.insert(0, macro_dir)
 
 try:
-    from Lights import directional_light
+    from Lights import directional_light, spot_light, point_light
 except ImportError as e:
     FC.Console.PrintError(f"Failed to import Lights module: {e}\n")
     raise
@@ -24,7 +24,7 @@ FC.Console.PrintMessage("Created group: 'Scene'\n")
 # Step 3: Create an App::Part object named "Lights"
 lights_part = doc.addObject("App::Part", "Lights")
 FC.Console.PrintMessage("Created App::Part: 'Lights'\n")
-lights_part.ViewObject.Visibility = False  # Explicitly set visibility state
+lights_part.ViewObject.Visibility = False  # Make visible to see lights
 
 #Step 4: Add the "Lights" App::Part to the "Scene" group
 scene_group.addObject(lights_part)
@@ -35,15 +35,32 @@ LIGHT_COLOR = (255, 179, 85)
 LIGHT_INTENSITY = 0.5
 
 def create_directional_light(name, horizontal_rot, vertical_rot):
-    """Create a directional light and set its properties."""
-    light = directional_light.createDirectionalLight()
-
-    if light:
+   """  Create a directional light and set its properties. """ 
+   light = directional_light.createDirectionalLight()
+   if light:
         light.HorizontalRotation = horizontal_rot
         light.VerticalRotation = vertical_rot
         light.Intensity = LIGHT_INTENSITY
         light.Color = LIGHT_COLOR
-    return light
+        return light
+
+def create_point_light(name):
+     """Create a point light and set its properties."""
+     light = point_light.createPointLight()
+     if light:
+        light.Intensity = LIGHT_INTENSITY
+        light.Color = LIGHT_COLOR
+        return light  
+
+
+def create_spot_light(name):
+     """Create a spot light and set its properties."""
+     light = spot_light.createSpotLight()
+     if light:
+        light.Intensity = LIGHT_INTENSITY
+        light.Color = LIGHT_COLOR
+        return light  
+
 
 
 Light1 = create_directional_light('DirectionalLight', -90, 60)
@@ -54,13 +71,14 @@ Light2 = create_directional_light('DirectionalLight', 120, 45)
 if Light2:
     lights_part.addObject(Light2)
 
+Light3 = create_point_light('PointLight')
+if Light3:
+    lights_part.addObject(Light3)
+
+Light4 = create_spot_light('SpotLight')
+if Light4:
+    lights_part.addObject(Light3) 
+
 # Recompute the document
 FC.ActiveDocument.recompute()
 FCGui.SendMsgToActiveView("ViewFit")  # Zoom to fit
-
-
-
-
-
-
-
