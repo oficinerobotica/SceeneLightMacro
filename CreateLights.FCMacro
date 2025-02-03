@@ -1,0 +1,66 @@
+import FreeCAD as FC
+import FreeCADGui as FCGui
+import os
+import sys
+
+# Add macro directory to Python path
+macro_dir = os.path.dirname(__file__)
+sys.path.insert(0, macro_dir)
+
+try:
+    from Lights import directional_light
+except ImportError as e:
+    FC.Console.PrintError(f"Failed to import Lights module: {e}\n")
+    raise
+
+
+# Step 1: Create or get the active document
+doc = FC.ActiveDocument
+
+# Step 2: Create an object group named "Scene"
+scene_group = doc.addObject("App::DocumentObjectGroup", "Scene")
+FC.Console.PrintMessage("Created group: 'Scene'\n")
+
+# Step 3: Create an App::Part object named "Lights"
+lights_part = doc.addObject("App::Part", "Lights")
+FC.Console.PrintMessage("Created App::Part: 'Lights'\n")
+lights_part.ViewObject.Visibility = False  # Explicitly set visibility state
+
+#Step 4: Add the "Lights" App::Part to the "Scene" group
+scene_group.addObject(lights_part)
+FC.Console.PrintMessage("Added 'Lights' to 'Scene'\n")
+
+# Constants
+LIGHT_COLOR = (255, 179, 85)
+LIGHT_INTENSITY = 0.5
+
+def create_directional_light(name, horizontal_rot, vertical_rot):
+    """Create a directional light and set its properties."""
+    light = directional_light.createDirectionalLight()
+
+    if light:
+        light.HorizontalRotation = horizontal_rot
+        light.VerticalRotation = vertical_rot
+        light.Intensity = LIGHT_INTENSITY
+        light.Color = LIGHT_COLOR
+    return light
+
+
+Light1 = create_directional_light('DirectionalLight', -90, 60)
+if Light1:
+    lights_part.addObject(Light1)
+
+Light2 = create_directional_light('DirectionalLight', 120, 45)
+if Light2:
+    lights_part.addObject(Light2)
+
+# Recompute the document
+FC.ActiveDocument.recompute()
+FCGui.SendMsgToActiveView("ViewFit")  # Zoom to fit
+
+
+
+
+
+
+
